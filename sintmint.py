@@ -9,7 +9,6 @@ from urllib.error import HTTPError
 from html.parser import HTMLParser
 import time
 from helpers import *
-import requests
 from lxml.html.clean import Cleaner
 from collections import defaultdict
 
@@ -311,6 +310,8 @@ class SintMint():
                 return page_contents.decode(encoding="utf-8", errors="replace")
 
     def get_sentiment_score(self, target_entity):
+        return 0.1, "Hockey"
+
         GOOGLE_SEARCH_PAGE = "https://google.com/search?q={}"
 
         # urllib uses python urllib/3.3.0 as the user agent on the request
@@ -417,8 +418,8 @@ class SintMint():
         text_weights = self.normalize_magnitudes(text_magnitudes)
         total_score = get_weighted_average(text_scores, text_magnitudes)
 
-        print("Overall sentiment score for {}: {}".format(target_entity,
-                                                          total_score))
+        print("Overall raw sentiment score for {}: {}".format(target_entity,
+                                                              total_score))
 
         likely_category = None
         max_confidence = -1
@@ -429,3 +430,10 @@ class SintMint():
                 max_confidence = confidence
 
         print("Most likely category: {}".format(likely_category))
+
+        # TODO
+        # generally, articles will not have extremely polarizing words about
+        # people throughout, to make the score reach the [-1.0, 1.0] bounds
+        # to make the range a bit more realistic, we should go from ~[-0.3, 0.3]
+        # and clamp at that
+        return total_score, likely_category

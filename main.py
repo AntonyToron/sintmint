@@ -7,10 +7,11 @@ import traceback
 def main():
     print("Starting")
 
-    sintmint = SintMint()
+    #sintmint = SintMint()
 
-    target_entity = input("Please enter a name or entity: ")
-    sintmint.get_sentiment_score(target_entity)
+    #target_entity = input("Please enter a name or entity: ")
+    #sentiment_score, entity_category =
+    #    sintmint.get_sentiment_score(target_entity)
 
 def cleanup():
     pass
