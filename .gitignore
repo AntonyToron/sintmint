@@ -3,3 +3,4 @@ keys
 run.sh
 __pycache__
 env
+*.txt
