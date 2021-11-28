@@ -5,6 +5,7 @@
 
 from google.cloud import language_v1
 import urllib.parse, urllib.request
+from urllib.error import HTTPError
 from html.parser import HTMLParser
 import time
 from helpers import *
@@ -222,11 +223,19 @@ class SintMint():
                             total_document_magnitude,
                             total_sentence_magnitude]
         total_weights = self.normalize_magnitudes(total_magnitudes)
+        print(total_sentiments)
+        print(total_magnitudes)
 
         sentiment = get_weighted_average(total_sentiments, total_weights)
+
+        categories = []
+        for category in google_response.categories:
+            splits = category.name.split("/")
+            categories.append((splits[-1], category.confidence))
+
         return TextInfo(sentiment,
                         sum(total_magnitudes),
-                        google_response.categories)
+                        categories)
 
     def get_sentiment_score(self, target_entity):
         GOOGLE_SEARCH_PAGE = "https://google.com/search?q={}"
@@ -245,17 +254,27 @@ class SintMint():
 
         # follow the links on the main page, and then those will collectively
         # construct our info on the initial input text
-        # limit to some finite number (e.g. 10) links so that we don't have to
+        # limit to some finite number (e.g. 3) links so that we don't have to
         # request too many times
+        seen_links = set()
+        unique_links = [link for link in self.parser.links if not \
+                        (link in seen_links or seen_links.add(link))]
         text_infos = []
+        links_fetched = 0
         NUM_LINKS_TO_CHECK = 1
-        top_links = set(self.parser.links[:NUM_LINKS_TO_CHECK])
-        for link in top_links:
+        for link in unique_links:
+            print(link)
             request = urllib.request.Request(
                 link,
                 headers={"User-Agent": DEFAULT_USER_AGENT,
                          "Accept": DEFAULT_ACCEPT})
-            page_contents = urllib.request.urlopen(request)
+
+            try:
+                page_contents = urllib.request.urlopen(request)
+            except HTTPError as err:
+                # TODO catch only 404 and https cert errors?
+                continue
+
             page_contents = page_contents.read().decode()[:SIZE_CAP]
 
             # we can alternatively bundle up all of the text into one pile and
@@ -266,6 +285,10 @@ class SintMint():
             text_info = self.analyze_text_annotations(text_annotations,
                                                       target_entity)
             text_infos.append(text_info)
+
+            links_fetched += 1
+            if links_fetched == NUM_LINKS_TO_CHECK:
+                break
 
             # so that we don't HTTP Error 429 for too many requests
             # TODO: can catch that error and try again later

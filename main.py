@@ -8,7 +8,9 @@ def main():
     print("Starting")
 
     sintmint = SintMint()
-    sintmint.get_sentiment_score("Nikola Tesla")
+
+    target_entity = input("Please enter a name or phrase: ")
+    sintmint.get_sentiment_score(target_entity)
 
 def cleanup():
     pass
