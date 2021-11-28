@@ -11,6 +11,7 @@ import time
 from helpers import *
 import requests
 from lxml.html.clean import Cleaner
+from collections import defaultdict
 
 DEFAULT_USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 " \
                      "(KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
@@ -392,6 +393,7 @@ class SintMint():
         text_scores = []
         text_magnitudes = []
         text_lengths = []
+        content_categories = defaultdict(list)
         for text_info in text_infos:
             print(text_info)
 
@@ -400,6 +402,9 @@ class SintMint():
             text_scores.append(text_info.score)
             text_magnitudes.append(text_info.magnitude)
             text_lengths.append(text_info.content_length)
+
+            for category, confidence in text_info.categories:
+                content_categories[category].append(confidence)
 
         # we don't want to get overly biased by one long article (e.g.
         # a wikipedia page), so lets normalize magnitudes by the article
@@ -414,3 +419,13 @@ class SintMint():
 
         print("Overall sentiment score for {}: {}".format(target_entity,
                                                           total_score))
+
+        likely_category = None
+        max_confidence = -1
+        for category, confidences in content_categories.items():
+            confidence = sum(confidences) / len(confidences)
+            if confidence > max_confidence:
+                likely_category = category
+                max_confidence = confidence
+
+        print("Most likely category: {}".format(likely_category))
