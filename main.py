@@ -9,7 +9,7 @@ def main():
 
     sintmint = SintMint()
 
-    target_entity = input("Please enter a name or phrase: ")
+    target_entity = input("Please enter a name or entity: ")
     sintmint.get_sentiment_score(target_entity)
 
 def cleanup():
