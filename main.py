@@ -2,12 +2,13 @@
 # Author: Antony Toron
 
 from sintmint import *
+import traceback
 
 def main():
     print("Starting")
 
     sintmint = SintMint()
-    sintmint.get_sentiment_score("This is a cool project")
+    sintmint.get_sentiment_score("Nikola Tesla")
 
 def cleanup():
     pass
@@ -15,7 +16,7 @@ def cleanup():
 if __name__ == "__main__":
     try:
         main()
-    except Exception as e:
-        print("Exiting due to error: " + str(e))
+    except:
+        traceback.print_exc()
         cleanup()
 
