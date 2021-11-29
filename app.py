@@ -34,10 +34,26 @@ def sentiment():
     # and clamp at that
     RANGE_RADIUS = 0.3
     sign = -1 if sentiment_score < 0 else 1
-    sentiment_score = sign * min(abs(sentiment_score), RANGE_RADIUS)
+    abs_score = abs(sentiment_score)
+    sentiment_score = sign * min(abs_score, RANGE_RADIUS)
     sentiment_percent = (sentiment_score + RANGE_RADIUS) / (RANGE_RADIUS * 2) * 100
+
+    verbal_sentiment_prefix = ""
+    if abs_score < (RANGE_RADIUS / 3):
+        verbal_sentiment_prefix = "slightly "
+    elif abs_score > ((RANGE_RADIUS / 3) * 2):
+        verbal_sentiment_prefix = "very "
+
+    verbal_sentiment_suffix = "positive" if sentiment_score >= 0 else "negative"
+    verbal_sentiment = verbal_sentiment_prefix + verbal_sentiment_suffix
+
+    displayed_percent = round(abs_score / RANGE_RADIUS * 100, 2)
 
     return render_template("sentiment.html",
                            sentiment_score=sentiment_score,
                            sentiment_percent=sentiment_percent,
-                           entity_category=entity_category)
+                           entity_category=entity_category,
+                           target_entity=target_entity,
+                           displayed_percent=displayed_percent,
+                           verbal_sentiment_suffix=verbal_sentiment_suffix,
+                           verbal_sentiment=verbal_sentiment)

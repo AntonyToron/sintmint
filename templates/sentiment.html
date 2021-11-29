@@ -9,10 +9,12 @@ SintMint
 	<div class="row height d-flex justify-content-center align-items-center">
 		<div class="col-md-9">
 			<div id='sentiment_card' class="card p-4 mt-3" style="display:none;">
+                <h1>Sentiment for <b>"{{ target_entity }}"</b>: {{ verbal_sentiment }}</h1>
                 <h1>Positivity scale:</h1>
                 <div class="progress">
                     <div id="sentiment_bar" class="progress-bar" style="width: {{ sentiment_percent }}%"></div>
                 </div>
+                <h1>{{ displayed_percent }}% {{ verbal_sentiment_suffix }}</h1>
                 <h1>Category: {{ entity_category }}</h1>
 			</div>
 		</div>
