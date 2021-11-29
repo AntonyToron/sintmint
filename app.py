@@ -20,7 +20,7 @@ def index():
     return render_template("index.html")
 
 @app.route("/sentiment", methods=["POST"])
-@limiter.limit("100 per day")
+@limiter.limit("3 per day")
 def sentiment():
     target_entity = request.form["entity"]
     print(target_entity)
