@@ -310,8 +310,6 @@ class SintMint():
                 return page_contents.decode(encoding="utf-8", errors="replace")
 
     def get_sentiment_score(self, target_entity):
-        return 0.1, "Hockey"
-
         GOOGLE_SEARCH_PAGE = "https://google.com/search?q={}"
 
         # urllib uses python urllib/3.3.0 as the user agent on the request

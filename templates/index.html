@@ -8,7 +8,7 @@ SintMint
 <div class="container">
 	<div class="row height d-flex justify-content-center align-items-center">
 		<div class="col-md-9">
-			<div class="card p-4 mt-3">
+			<div class="card p-4 mt-3" id="search_card">
 				<h1 class="heading mb-4 mt-2 text-center">
 					SintMint
 				</h1>
@@ -18,10 +18,20 @@ SintMint
                 <form class="search" action="{{ url_for('sentiment') }}" method="post">
 					<i class="fa fa-search"></i>
 					<input type="text" class="form-control" name="entity" placeholder="Enter a place or entity">
-					<button type="submit" class="btn btn-primary">Search</button>
+					<button type="submit" class="btn btn-primary" id='submit_button'>Search</button>
 				</form>
 			</div>
+			<div class="card p-4 mt-3 justify-content-center align-items-center" style="display:none;" id="loading_card">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
 		</div>
 	</div>
+
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/button.js') }}"></script>
 {% endblock %}

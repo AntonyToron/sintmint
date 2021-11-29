@@ -8,10 +8,18 @@ SintMint
 <div class="container">
 	<div class="row height d-flex justify-content-center align-items-center">
 		<div class="col-md-9">
-			<div class="card p-4 mt-3">
-                <h1>Test</h1>
+			<div id='sentiment_card' class="card p-4 mt-3" style="display:none;">
+                <h1>Positivity scale:</h1>
+                <div class="progress">
+                    <div id="sentiment_bar" class="progress-bar" style="width: {{ sentiment_percent }}%"></div>
+                </div>
+                <h1>Category: {{ entity_category }}</h1>
 			</div>
 		</div>
 	</div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/sentiment.js') }}"></script>
 {% endblock %}
