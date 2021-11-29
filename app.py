@@ -28,10 +28,14 @@ def sentiment():
     sentiment_score, entity_category = \
         sintmint.get_sentiment_score(target_entity)
 
+    # generally, articles will not have extremely polarizing words about
+    # people throughout, to make the score reach the [-1.0, 1.0] bounds
+    # to make the range a bit more realistic, we should go from ~[-0.3, 0.3]
+    # and clamp at that
     RANGE_RADIUS = 0.3
     sign = -1 if sentiment_score < 0 else 1
     sentiment_score = sign * min(abs(sentiment_score), RANGE_RADIUS)
-    sentiment_percent = (abs(sentiment_score) + RANGE_RADIUS) / (RANGE_RADIUS * 2) * 100
+    sentiment_percent = (sentiment_score + RANGE_RADIUS) / (RANGE_RADIUS * 2) * 100
 
     return render_template("sentiment.html",
                            sentiment_score=sentiment_score,

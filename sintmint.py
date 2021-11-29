@@ -90,6 +90,7 @@ class SintMint():
     def __init__(self):
         self.client = language_v1.LanguageServiceClient()
         self.parser = BasicHTMLParser()
+
         self.cleaner = Cleaner(page_structure=True,
                                scripts=True,
                                javascript=True,
@@ -102,7 +103,9 @@ class SintMint():
                                embedded=True,
                                frames=True,
                                forms=True,
-                               annoying_tags=True)
+                               annoying_tags=True,
+                               safe_attrs_only=True,
+                               safe_attrs=frozenset())
 
     # internal, should really only be used on an actual piece of text and not
     # the input text from the user
@@ -429,9 +432,5 @@ class SintMint():
 
         print("Most likely category: {}".format(likely_category))
 
-        # TODO
-        # generally, articles will not have extremely polarizing words about
-        # people throughout, to make the score reach the [-1.0, 1.0] bounds
-        # to make the range a bit more realistic, we should go from ~[-0.3, 0.3]
-        # and clamp at that
+        self.parser.links.clear()
         return total_score, likely_category
