@@ -15,11 +15,11 @@ SintMint
 				<h3 class="heading mx-auto text-center">
 					Curious about the general sentiment on something online?
 				</h3>
-				<div class="search">
+                <form class="search" action="{{ url_for('sentiment') }}" method="post">
 					<i class="fa fa-search"></i>
-					<input type="text" class="form-control" placeholder="Enter a place or entity">
-					<button class="btn btn-primary">Search</button>
-				</div>
+					<input type="text" class="form-control" name="entity" placeholder="Enter a place or entity">
+					<button type="submit" class="btn btn-primary">Search</button>
+				</form>
 			</div>
 		</div>
 	</div>
