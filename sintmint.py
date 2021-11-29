@@ -4,6 +4,8 @@
 # most based on https://googleapis.dev/python/language/latest/usage.html
 
 from google.cloud import language_v1
+from google.oauth2 import service_account
+
 import urllib.parse, urllib.request
 from urllib.error import HTTPError
 from html.parser import HTMLParser
@@ -11,6 +13,8 @@ import time
 from helpers import *
 from lxml.html.clean import Cleaner
 from collections import defaultdict
+import os
+import json
 
 DEFAULT_USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 " \
                      "(KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
@@ -88,7 +92,14 @@ class Sentiment():
 class SintMint():
 
     def __init__(self):
-        self.client = language_v1.LanguageServiceClient()
+        # thanks to https://stackoverflow.com/questions/47446480
+        json_str = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+        json_data = json.loads(json_str)
+        json_data["private_key"] = json_data["private_key"].replace('\\n', '\n')
+        credentials = service_account.Credentials.from_service_account_info(
+            json_data)
+
+        self.client = language_v1.LanguageServiceClient(credentials=credentials)
         self.parser = BasicHTMLParser()
 
         self.cleaner = Cleaner(page_structure=True,
