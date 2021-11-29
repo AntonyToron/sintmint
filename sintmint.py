@@ -324,6 +324,11 @@ class SintMint():
                 return page_contents.decode(encoding="utf-8", errors="replace")
 
     def get_sentiment_score(self, target_entity):
+        # TODO
+        # check if this has been queried recently (e.g. within the last 30 days)
+        # and return the sentiment from the db, if so, so that we don't need
+        # to query the google API
+
         GOOGLE_SEARCH_PAGE = "https://google.com/search?q={}"
 
         # urllib uses python urllib/3.3.0 as the user agent on the request
