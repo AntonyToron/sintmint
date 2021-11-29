@@ -34,10 +34,10 @@ def sentiment():
     # and clamp at that
     RANGE_RADIUS = 0.3
     sign = -1 if sentiment_score < 0 else 1
-    abs_score = abs(sentiment_score)
-    sentiment_score = sign * min(abs_score, RANGE_RADIUS)
+    sentiment_score = sign * min(abs(sentiment_score), RANGE_RADIUS)
     sentiment_percent = (sentiment_score + RANGE_RADIUS) / (RANGE_RADIUS * 2) * 100
 
+    abs_score = abs(sentiment_score)
     verbal_sentiment_prefix = ""
     if abs_score < (RANGE_RADIUS / 3):
         verbal_sentiment_prefix = "slightly "
